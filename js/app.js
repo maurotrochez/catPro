@@ -47,6 +47,7 @@ var octopus = {
         // tell our views to initialize
         catListView.init();
         catView.init();
+        catAdmin.init();
     },
 
     getCurrentCat: function() {
@@ -66,6 +67,14 @@ var octopus = {
     incrementCounter: function() {
         model.currentCat.clickCount++;
         catView.render();
+    },
+
+    updateCat: function(name, url, clicks){
+        //model.currentCat = cat;
+        model.currentCat.name = name;
+        model.currentCat.imgAttribution = url;
+        model.currentCat.clickCount = clicks;
+        catView.render();
     }
 };
 
@@ -80,11 +89,21 @@ var catView = {
         this.catNameElem = document.getElementById('cat-name');
         this.catImageElem = document.getElementById('cat-img');
         this.countElem = document.getElementById('cat-count');
+        this.adminCat = document.getElementById('admin');
+
+
 
         // on click, increment the current cat's counter
         this.catImageElem.addEventListener('click', function(){
             octopus.incrementCounter();
         });
+
+        this.adminCat.addEventListener('click',function(){
+            catAdmin.render();
+            catAdmin.show();
+        });
+
+
 
         // render this view (update the DOM elements with the right values)
         this.render();
@@ -133,6 +152,7 @@ var catListView = {
                 return function() {
                     octopus.setCurrentCat(catCopy);
                     catView.render();
+                    catAdmin.render();
                 };
             })(cat));
 
@@ -143,19 +163,55 @@ var catListView = {
 };
 
 var catAdmin = {
-    init: function(){
-        this.catEdit = document.getElementById('edit');
-        this.catEditConfirm = document.getElementById('confirm');
 
-        this.catEditConfirm.addEventListener('click', function(){
-            this.render();
+    init: function(){
+
+
+        this.catEdit = document.getElementById('edit');
+        var editCatName = document.getElementById('editCatName');
+        var editURL = document.getElementById('editURL');
+        var editClicks = document.getElementById('editClicks');
+        this.editConfirm = document.getElementById('confirm1');
+        this.cancel = document.getElementById('cancel');
+
+        this.noneShow();
+
+        this.cancel.addEventListener('click', function(){
+            catAdmin.noneShow();
         });
+
+        this.editConfirm.addEventListener('click', function (){
+            octopus.updateCat(editCatName.value, editURL.value, editClicks.value);
+            catListView.render();
+        });
+
+
+
     },
 
     render: function(){
-        var elem;
-        var currentCat = octopus.getCurrentCat();
 
+        var currentCat = octopus.getCurrentCat();
+        editCatName.value = currentCat.name;
+        editURL.value = currentCat.imgAttribution;
+        editClicks.value = currentCat.clickCount;
+
+    },
+
+    show: function(){
+        this.catEdit.style.display = "inline";
+    },
+
+    noneShow: function(){
+        this.catEdit.style.display = "none";
+    },
+
+    confirmC: function(){
+        var catname = this.editCatName.value;
+        var url = this.editURL.value;
+        var clicks = this.editClicks.value;
+
+        octopus.updateCat(catname, url, clicks);
     }
 
 };
