@@ -4,6 +4,7 @@ var ViewModel = function(){
     this.imgSrc = ko.observable('img/cat_picture1.jpg');
     this.imgAttribution = ko.observable('http://www.flicker.com');
     this.type = ko.observable('Newborn');
+    this.nickNames = ko.observableArray(['Iron', 'Bots', 'Juk']);
 
     this.incrementCounter = function () {
         this.clickCount(this.clickCount() + 1);
