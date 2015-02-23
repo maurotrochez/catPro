@@ -1,19 +1,28 @@
-var ViewModel = function(){
+var Cat = function(){
     this.clickCount = ko.observable(0);
     this.name = ko.observable('Tabby');
     this.imgSrc = ko.observable('img/cat_picture1.jpg');
     this.imgAttribution = ko.observable('http://www.flicker.com');
-    this.type = ko.observable('Newborn');
     this.nickNames = ko.observableArray(['Iron', 'Bots', 'Juk']);
-
-    this.incrementCounter = function () {
-        this.clickCount(this.clickCount() + 1);
-        if(this.clickCount()>10){
-            this.type('Infant');
+    
+    this.type = ko.computed(function(){
+        var title;
+        var clicks = this.clickCount();
+        if(clicks < 10){
+            title = 'Newborn';
         }
-        else if(this.clickCount()>110) this.type('Teen');
+        else if(clicks < 100){
+            title = 'Child';
+        }
+        return title;
+    }, this);
+
+};
+
+var ViewModel = function(){
+    this.currentCat = ko.observable(new Cat());
+    this.incrementCounter = function () {
+        this.currentCat().clickCount(this.currentCat().clickCount() + 1);
     };
-
-
 };
 ko.applyBindings(new ViewModel());
