@@ -1,9 +1,36 @@
-var Cat = function(){
-    this.clickCount = ko.observable(0);
-    this.name = ko.observable('Tabby');
-    this.imgSrc = ko.observable('img/cat_picture1.jpg');
-    this.imgAttribution = ko.observable('http://www.flicker.com');
-    this.nickNames = ko.observableArray(['Iron', 'Bots', 'Juk']);
+var initialCats = [
+    {
+        clickCount :0,
+        name: 'Tabby',
+        imgSrc: 'img/cat_picture1.jpg',
+        imgAttribution: 'http://www.flicker.com',
+        nickNames: ['Zero']
+    },{
+        clickCount :0,
+        name: 'Iron',
+        imgSrc: 'img/cat_picture2.jpeg',
+        imgAttribution: 'http://www.flicker.com',
+        nickNames: ['Iron', 'Bots']
+    },{
+        clickCount :0,
+        name: 'Thor',
+        imgSrc: 'img/cat_picture3.jpeg',
+        imgAttribution: 'http://www.flicker.com',
+        nickNames: ['Zzzz', 'Crazy', 'Juk']
+    },{
+        clickCount :0,
+        name: 'Luki',
+        imgSrc: 'img/cat_picture4.jpeg',
+        imgAttribution: 'http://www.flicker.com',
+        nickNames: ['Iron', 'Bots', 'Juk']
+    }];
+
+var Cat = function(data){
+    this.clickCount = ko.observable(data.clickCount);
+    this.name = ko.observable(data.name);
+    this.imgSrc = ko.observable(data.imgSrc);
+    this.imgAttribution = ko.observable(data.imgAttribution);
+    this.nickNames = ko.observableArray(data.nickNames);
     
     this.type = ko.computed(function(){
         var title;
@@ -20,9 +47,29 @@ var Cat = function(){
 };
 
 var ViewModel = function(){
-    this.currentCat = ko.observable(new Cat());
+    var that = this;
+
+    this.catList = ko.observableArray([]);
+
+    initialCats.forEach(function(cat){
+       that.catList.push(new Cat(cat));
+    });
+
+    this.currentCat = ko.observable(this.catList()[0]);
     this.incrementCounter = function () {
-        this.currentCat().clickCount(this.currentCat().clickCount() + 1);
+        that.currentCat().clickCount(that.currentCat().clickCount() + 1);
+    };
+
+    this.clickCat = function(cat){
+        /*that.currentCat().imgAttribution(cat.imgAttribution());
+        that.currentCat().imgSrc(cat.imgSrc());
+        that.currentCat().clickCount(cat.clickCount());
+        that.currentCat().name(cat.name());
+        that.currentCat().nickNames(cat.nickNames());*/
+        //var newCat = new Cat(cat);
+        //return that.currentCat = ko.observable(newCat);
+        console.log(cat);
+
     };
 };
 ko.applyBindings(new ViewModel());
