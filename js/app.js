@@ -55,21 +55,13 @@ var ViewModel = function(){
        that.catList.push(new Cat(cat));
     });
 
-    this.currentCat = ko.observable(this.catList()[0]);
+    this.currentCat = ko.observable(this.catList()[1]);
     this.incrementCounter = function () {
         that.currentCat().clickCount(that.currentCat().clickCount() + 1);
     };
 
     this.clickCat = function(cat){
-        /*that.currentCat().imgAttribution(cat.imgAttribution());
-        that.currentCat().imgSrc(cat.imgSrc());
-        that.currentCat().clickCount(cat.clickCount());
-        that.currentCat().name(cat.name());
-        that.currentCat().nickNames(cat.nickNames());*/
-        //var newCat = new Cat(cat);
-        //return that.currentCat = ko.observable(newCat);
-        console.log(cat);
-
+        that.currentCat(cat);
     };
 };
 ko.applyBindings(new ViewModel());
